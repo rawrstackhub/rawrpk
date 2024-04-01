@@ -14,9 +14,17 @@ type RepoFile struct {
 	URL  string `json:"download_url"`
 }
 
+type PkFile struct {
+	name    string
+	fileURL string
+}
+
+var Pack PkFile
+
 func ParseGit(repo []string) {
 	fmt.Println("Parsing page:", repo)
 	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/", repo[0], repo[1])
+	Pack.name = repo[1]
 
 	resp, err := http.Get(apiURL)
 	if err != nil {
@@ -56,7 +64,7 @@ func ParseGit(repo []string) {
 		}
 		return
 	} else {
-		if err := RawrpkParse(files[rawrpk].URL); err != nil {
+		if err := ParseFile(files[rawrpk].URL); err != nil {
 			fmt.Printf("Error parsing .rawrpk file: %s\n", err)
 			return
 		}

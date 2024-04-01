@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
+	"rawrpk/src/pkSystem"
 	"strings"
 )
 
-func RawrpkParse(rawrpkFile string) error {
+func ParseFile(rawrpkFile string) error {
 	fmt.Println("Parsing File:", rawrpkFile)
 	response, err := http.Get(rawrpkFile)
 	if err != nil {
@@ -23,6 +24,7 @@ func RawrpkParse(rawrpkFile string) error {
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		fmt.Println("Parsing line:", line)
 		if err := parseLine(line); err != nil {
 			fmt.Printf("Error parsing line: %s\n", err)
 			continue
@@ -45,6 +47,14 @@ func parseLine(line string) error {
 
 	switch words[0] {
 	case "INSTALL":
+		if len(words) != 2 {
+			return fmt.Errorf("invalid INSTALL format: %s", line)
+		}
+		Pack.fileURL = words[1]
+		err := pkSystem.Install(Pack.name, Pack.fileURL)
+		if err != nil {
+			return err
+		}
 		fmt.Println("Installing from link:", words[1])
 
 	case "ENVVAR":
