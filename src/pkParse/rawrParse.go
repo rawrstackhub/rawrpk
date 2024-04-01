@@ -61,6 +61,10 @@ func parseLine(line string) error {
 		if len(words) != 4 || words[1] != "ADD" {
 			return fmt.Errorf("invalid ENVVAR format: %s", line)
 		}
+		err := pkSystem.SetEnvVar(words[2], words[3])
+		if err != nil {
+			return err
+		}
 		fmt.Printf("Adding ENVVAR to %s with location: %s\n", words[2], words[3])
 	default:
 		return fmt.Errorf("unknown instruction: %s", words[0])
