@@ -17,11 +17,8 @@ type RepoFile struct {
 
 func ParseGit(repo []string) {
 	fmt.Println("Parsing page:", repo)
-
-	// GitHub API endpoint to list repository contents
 	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/", repo[0], repo[1])
 
-	// Make an HTTP GET request
 	resp, err := http.Get(apiURL)
 	if err != nil {
 		fmt.Printf("Error fetching repository contents: %s\n", err)
@@ -29,7 +26,6 @@ func ParseGit(repo []string) {
 	}
 	defer resp.Body.Close()
 
-	// Read and parse the JSON response
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("Error reading response body: %s\n", err)
@@ -85,7 +81,6 @@ func RawrpkParse(rawrpkFile string) error {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if err := parseLine(line); err != nil {
-			// Handle any errors in parsing
 			fmt.Printf("Error parsing line: %s\n", err)
 			continue
 		}
@@ -110,7 +105,6 @@ func parseLine(line string) error {
 		fmt.Println("Installing from link:", words[1])
 
 	case "ENVVAR":
-		// Handle the ENVVAR ADD instruction
 		if len(words) != 4 || words[1] != "ADD" {
 			return fmt.Errorf("invalid ENVVAR format: %s", line)
 		}

@@ -7,6 +7,11 @@ import (
 	"rawrpk/src/pkCmds"
 )
 
+// Outside of main are 3 packages: pkCmds, pkParse, and pkSystem.
+// pkCmds handles the get command.
+// pkParse parsing for both the get command & the github repository.
+// pkSystem handles the rawrpk procedures.
+
 func main() {
 	flag.Parse()
 
