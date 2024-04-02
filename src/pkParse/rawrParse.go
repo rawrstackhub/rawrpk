@@ -55,13 +55,13 @@ func parseLine(line string) error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("Installing from link:", words[1])
+		fmt.Println("Installing from link:", Pack.fileURL)
 
 	case "ENVVAR":
 		if len(words) != 4 || words[1] != "ADD" {
 			return fmt.Errorf("invalid ENVVAR format: %s", line)
 		}
-		err := pkSystem.SetEnvVar(words[2], words[3])
+		err := pkSystem.AddPath(Pack.installLoc)
 		if err != nil {
 			return err
 		}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -15,8 +16,9 @@ type RepoFile struct {
 }
 
 type PkFile struct {
-	name    string
-	fileURL string
+	name       string
+	fileURL    string
+	installLoc string
 }
 
 var Pack PkFile
@@ -64,6 +66,12 @@ func ParseGit(repo []string) {
 		}
 		return
 	} else {
+		userDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Printf("Error getting user home directory: %s\n", err)
+			return
+		}
+		Pack.installLoc = userDir + "\\rawrpk\\" + Pack.name
 		if err := ParseFile(files[rawrpk].URL); err != nil {
 			fmt.Printf("Error parsing .rawrpk file: %s\n", err)
 			return
