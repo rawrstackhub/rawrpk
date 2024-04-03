@@ -1,4 +1,4 @@
-package pkParse
+package gitparse
 
 import (
 	"encoding/json"
@@ -6,27 +6,15 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"rawrpk/internal/common"
+	"rawrpk/internal/rawrpkg"
 	"strings"
 )
-
-type RepoFile struct {
-	Name string `json:"name"`
-	Path string `json:"path"`
-	URL  string `json:"download_url"`
-}
-
-type PkFile struct {
-	name       string
-	fileURL    string
-	installLoc string
-}
-
-var Pack PkFile
 
 func ParseGit(repo []string) {
 	fmt.Println("Parsing page:", repo)
 	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/", repo[0], repo[1])
-	Pack.name = repo[1]
+	common.Pack.Name = repo[1]
 
 	resp, err := http.Get(apiURL)
 	if err != nil {
@@ -41,7 +29,7 @@ func ParseGit(repo []string) {
 		return
 	}
 
-	var files []RepoFile
+	var files []common.RepoFile
 	if err := json.Unmarshal(body, &files); err != nil {
 		fmt.Printf("Error parsing JSON: %s\n", err)
 		return
@@ -71,8 +59,8 @@ func ParseGit(repo []string) {
 			fmt.Printf("Error getting user home directory: %s\n", err)
 			return
 		}
-		Pack.installLoc = userDir + "\\rawrpk\\" + Pack.name
-		if err := ParseFile(files[rawrpk].URL); err != nil {
+		common.Pack.InstallLoc = userDir + "\\rawrpk\\" + common.Pack.Name
+		if err := rawrpkg.ParseFile(files[rawrpk].URL); err != nil {
 			fmt.Printf("Error parsing .rawrpk file: %s\n", err)
 			return
 		}

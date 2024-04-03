@@ -1,4 +1,4 @@
-package pkSystem
+package sysops
 
 import (
 	"fmt"

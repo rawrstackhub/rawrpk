@@ -1,10 +1,11 @@
-package pkParse
+package rawrpkg
 
 import (
 	"bufio"
 	"fmt"
 	"net/http"
-	"rawrpk/internal/pkSystem"
+	"rawrpk/internal/common"
+	"rawrpk/internal/sysops"
 	"strings"
 )
 
@@ -50,18 +51,18 @@ func parseLine(line string) error {
 		if len(words) != 2 {
 			return fmt.Errorf("invalid INSTALL format: %s", line)
 		}
-		Pack.fileURL = words[1]
-		err := pkSystem.Install(Pack.name, Pack.fileURL)
+		common.Pack.FileURL = words[1]
+		err := sysops.Install(common.Pack.Name, common.Pack.FileURL)
 		if err != nil {
 			return err
 		}
-		fmt.Println("Installing from link:", Pack.fileURL)
+		fmt.Println("Installing from link:", common.Pack.FileURL)
 
 	case "ENVVAR":
 		if len(words) != 4 || words[1] != "ADD" {
 			return fmt.Errorf("invalid ENVVAR format: %s", line)
 		}
-		err := pkSystem.AddPath(Pack.installLoc)
+		err := sysops.AddPath(common.Pack.InstallLoc)
 		if err != nil {
 			return err
 		}
