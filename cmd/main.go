@@ -6,11 +6,19 @@ import (
 	"rawrpk/internal/gitparse"
 )
 
+var Pack common.PkgData
+
 func main() {
-	repository, i, err := cli.CLIparse()
+	switch command() {
+	case common.Github:
+		gitparse.ParseGit()
+	}
+}
+
+func command() int8 {
+	i, err := cli.CLIparse(&Pack)
 	if err != nil {
 		panic(err)
-	} else if i == common.Github {
-		gitparse.ParseGit(repository)
 	}
+	return i
 }

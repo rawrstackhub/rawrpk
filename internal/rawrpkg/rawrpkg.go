@@ -52,7 +52,7 @@ func parseLine(line string) error {
 			return fmt.Errorf("invalid INSTALL format: %s", line)
 		}
 		common.Pack.FileURL = words[1]
-		err := sysops.Install(common.Pack.Name, common.Pack.FileURL)
+		err := sysops.Install(common.Pack.Title, common.Pack.FileURL)
 		if err != nil {
 			return err
 		}

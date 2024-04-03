@@ -14,7 +14,7 @@ import (
 func ParseGit(repo []string) {
 	fmt.Println("Parsing page:", repo)
 	apiURL := fmt.Sprintf("https://api.github.com/repos/%s/%s/contents/", repo[0], repo[1])
-	common.Pack.Name = repo[1]
+	common.Pack.Title = repo[1]
 
 	resp, err := http.Get(apiURL)
 	if err != nil {
@@ -59,7 +59,7 @@ func ParseGit(repo []string) {
 			fmt.Printf("Error getting user home directory: %s\n", err)
 			return
 		}
-		common.Pack.InstallLoc = userDir + "\\rawrpk\\" + common.Pack.Name
+		common.Pack.InstallLoc = userDir + "\\rawrpk\\" + common.Pack.Title
 		if err := rawrpkg.ParseFile(files[rawrpk].URL); err != nil {
 			fmt.Printf("Error parsing .rawrpk file: %s\n", err)
 			return
