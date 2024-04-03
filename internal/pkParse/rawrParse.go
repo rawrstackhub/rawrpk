@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
-	"rawrpk/src/pkSystem"
+	"rawrpk/internal/pkSystem"
 	"strings"
 )
 
