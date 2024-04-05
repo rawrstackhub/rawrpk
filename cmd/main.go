@@ -16,7 +16,7 @@ func main() {
 }
 
 func command() int8 {
-	i, err := cli.CLIparse(&Pack)
+	cli.CLIparse()
 	if err != nil {
 		panic(err)
 	}

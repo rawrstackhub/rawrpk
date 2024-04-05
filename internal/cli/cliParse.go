@@ -10,7 +10,7 @@ import (
 
 var loc []string = []string{"", ""}
 
-func CLIparse(pkg *common.PkgData) error {
+func CLIparse() {
 	flag.Parse()
 
 	if len(flag.Args()) < 2 {
