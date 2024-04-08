@@ -8,9 +8,7 @@ import (
 	"strings"
 )
 
-var loc []string = []string{"", ""}
-
-func CLIparse() {
+func CliHandle(pck *common.PkgData) int8 {
 	flag.Parse()
 
 	if len(flag.Args()) < 2 {
@@ -23,37 +21,35 @@ func CLIparse() {
 
 	switch command {
 	case "get":
-		r, err := getHndl(subCmd)
-		if err != nil {
-			return
-		}
+		data := sourceSplit(subCmd)
+		pck.Title = data[2]   //EX: lsf
+		pck.Source = data[:2] //EX: github / rawrstackhub
+
+		return common.Github
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 		os.Exit(1)
 	}
-	return fmt.Errorf("error parsing command: %s", command)
+	return 0
 }
 
-func getHndl(subCmd string) error {
-	parts := strings.SplitN(subCmd, ".", 2)
-	if len(parts) != 2 {
-		fmt.Println("Invalid source identifier. Expected format: <source>.<repository>")
+func sourceSplit(source string) [3]string {
+	var export [3]string
+
+	mainSRC := strings.SplitN(source, ".", 2)
+	if len(mainSRC) != 2 {
+		fmt.Println("Invalid source format")
 		os.Exit(1)
 	}
+	export[0] = mainSRC[0] //EX: github
 
-	source := parts[0]
-	identifier := parts[1]
-
-	switch source {
-	case "github":
-		fmt.Printf("Fetching from GitHub: %s\n", identifier)
-		loc = strings.Split(identifier, "/")
-		return common.Github, nil
-	case "url":
-		fmt.Printf("Fetching from URL: %s\n", identifier)
-	default:
-		fmt.Printf("Unsupported source: %s\n", source)
+	subSRC := strings.Split(mainSRC[1], "/")
+	if len(subSRC) != 2 {
+		fmt.Println("Invalid source format")
 		os.Exit(1)
 	}
-	return 0, fmt.Errorf("error fetching from source: %s", subCmd)
+	export[1] = subSRC[0] //EX: rawrstackhub
+	export[2] = subSRC[1] //EX: lsf
+
+	return export
 }

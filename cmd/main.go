@@ -3,22 +3,26 @@ package main
 import (
 	"rawrpk/internal/cli"
 	"rawrpk/internal/common"
-	"rawrpk/internal/gitparse"
+	pkgSrc "rawrpk/internal/pkgsources"
+	"rawrpk/internal/rawrHndl"
+	"rawrpk/internal/sysops"
 )
 
 var Pack common.PkgData
 
 func main() {
-	switch command() {
+	switch cli.CliHandle(&Pack) {
 	case common.Github:
-		gitparse.ParseGit()
+		pkgSrc.Github(&Pack)
 	}
-}
 
-func command() int8 {
-	cli.CLIparse()
-	if err != nil {
-		panic(err)
+	cmds := rawrHndl.File(&Pack)
+	for _, cmd := range cmds {
+		switch rawrHndl.ParseLine(&Pack, cmd) {
+		case common.Install:
+			sysops.Install(&Pack)
+		case common.EnvVar:
+			sysops.AddPath(&Pack)
+		}
 	}
-	return i
 }
